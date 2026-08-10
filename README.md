@@ -11,8 +11,8 @@
 ```
 YYYY-MM-DD/forecast/          赛前推演：图 + 成稿（开赛前发布）
 YYYY-MM-DD/settle/            赛后比对：图 + 成稿（赛后原样结算）
-YYYY-MM-DD/SHA256SUMS         该期全部文件的哈希
-YYYY-MM-DD/SHA256SUMS.ots     该期的 OpenTimestamps 时间戳
+YYYY-MM-DD/*/SHA256SUMS       该目录全部文件的哈希
+YYYY-MM-DD/*/SHA256SUMS.ots   该目录的 OpenTimestamps 时间戳
 MANIFEST.csv                  全部文件的 SHA-256、字节数、出稿时刻
 ```
 
@@ -50,8 +50,9 @@ Import-Csv MANIFEST.csv | ForEach-Object {
 
 ## 时间戳
 
-每期目录下的 `SHA256SUMS.ots` 是 [OpenTimestamps](https://opentimestamps.org)
-时间戳，把该期的哈希清单锚进了比特币区块链。
+`forecast/` 和 `settle/` 各自目录下的 `SHA256SUMS.ots` 是
+[OpenTimestamps](https://opentimestamps.org) 时间戳，把该目录的哈希清单
+锚进了比特币区块链。
 
 验证不需要信任本仓库，也不需要本仓库还活着：把同一目录下的 `SHA256SUMS`
 和 `SHA256SUMS.ots` 一起拖到 https://opentimestamps.org 的验证框，
@@ -61,8 +62,13 @@ Import-Csv MANIFEST.csv | ForEach-Object {
 它不证明是谁做的，也不证明当时公开发表过 —— 后者由各平台帖子自己的
 时间戳承担。两样拼起来才完整。
 
-第 001 期（2026-08-09）的章是次日补盖的，所以那一期只能证明「不晚于
-2026-08-10」。此后每期都在当日盖。
+**两张章分开盖，是因为一张合起来的章证明不了「赛前」。** 结算稿要等次日
+才存在，合成一张就只能次日盖，那张章说的是「不晚于次日」。所以
+`forecast/` 的章在当日、最早开球之前盖，`settle/` 的章在次日结算后盖。
+
+第 001、002 期（2026-08-09、08-10）用的是期目录根上的一张老式总章，
+在 2026-08-10 补盖，只能证明「不晚于 2026-08-10」。此后改为上面的两张章。
+老章不重盖 —— 重写哈希清单会让已盖的章失效。
 
 ## 关于内容
 
